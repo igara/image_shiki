@@ -31,7 +31,7 @@ if (process.argv[4]) {
     scroll = process.argv[4];
 } else {
     scroll = 1;
-    cnsole.log("1回スクロールした分の画像を取得します");
+    console.log("1回スクロールした分の画像を取得します");
 }
 
 const save_img_dir = __dirname + `/data/scraping/${sns}/${keyword}`;
