@@ -16,6 +16,8 @@ train_label = 0
 for dir in os.listdir("data/train"):
     if dir == ".DS_Store":
         continue
+    if dir == ".keep":
+        continue
 
     dir1 = "data/train/" + dir
 
@@ -62,7 +64,7 @@ opt = Adam(lr=0.001)
 model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
 # 学習を実行。10%はテストに使用。
 model.fit(image_list, Y, nb_epoch=1500, batch_size=100, validation_split=0.1)
-model.save("aaa.h5")
+model.save("train.h5")
 
 print("\n\n\n\n\n\n\n\n")
 print("--------------- train finish ---------------")
@@ -74,6 +76,8 @@ ok_count = 0.
 test_label = 0
 for dir in os.listdir("data/train"):
     if dir == ".DS_Store":
+        continue
+    if dir == ".keep":
         continue
 
     dir1 = "data/test/" + dir 
