@@ -1,0 +1,9 @@
+node_modules
+data/test/*
+data/train/*
+!data/test/.keep
+!data/train/.keep
+data/scraping/instagram/*
+data/scraping/twitter/*
+!data/scraping/instagram/.keep
+!data/scraping/twitter/.keep
