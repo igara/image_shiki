@@ -4,6 +4,6 @@
 
 
 ```
-node index.js [keyword] [instagram or twitter] [更読み回数]
+node chrome_launcher.js [keyword] [instagram or twitter] [更読み回数]
 ```
 
