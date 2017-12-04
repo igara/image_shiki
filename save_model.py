@@ -1,5 +1,5 @@
 from keras.models import Sequential
-from keras.layers import Activation, Dense, Dropout, Convolution2D, MaxPooling2D, Flatten
+from keras.layers import Activation, Dense, Dropout, Conv2D, MaxPooling2D, Flatten
 from keras.utils.np_utils import to_categorical
 from keras.optimizers import Adam
 import numpy as np
@@ -74,41 +74,24 @@ Y = to_categorical(label_list)
 
 # モデルを生成してニューラルネットを構築
 model = Sequential()
-model.add(Convolution2D(100, 3, 3, border_mode='same', input_shape=(3, 100, 100)))
-model.add(Activation("relu"))
+model.add(Conv2D(32, (3, 3), padding="same", input_shape=image_list.shape[1:]))
+model.add(Activation('relu'))
+model.add(Conv2D(32, (3, 3)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
 
-# 2層目の畳み込み層
-model.add(Convolution2D(100, 3, 3, border_mode="same"))
-model.add(Activation("relu"))
+model.add(Conv2D(64, (3, 3), padding='same'))
+model.add(Activation('relu'))
+model.add(Conv2D(64, (3, 3)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
 
-if train_label > 2:
-    num = 0
-    while num < train_label - 2:
-        num = num + 1
-        q, mod = divmod(num, 2)
-        if mod != 0:
-            # プーリング層
-            model.add(MaxPooling2D())
-            # Dropoutとは過学習を防ぐためのもの　0.5は次のニューロンへのパスをランダムに半分にするという意味
-            model.add(Dropout(0.5))
-            model.add(Convolution2D(2 * (q + 1) * 100, 3, 3, border_mode="same"))
-            model.add(Activation("relu"))
-        else:
-            model.add(Convolution2D(2 * q * 100, 3, 3, border_mode="same"))
-            model.add(Activation("relu"))
-
-# Dropout
-model.add(Dropout(0.5))
-# 平坦化
 model.add(Flatten())
-
-# 全結合層　FC
-model.add(Dense(100))
-model.add(Activation("relu"))
-
-#Dropout
+model.add(Dense(512))
+model.add(Activation('relu'))
 model.add(Dropout(0.5))
-
 model.add(Dense(train_label))
 model.add(Activation("softmax"))
 
