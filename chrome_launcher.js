@@ -1,6 +1,10 @@
 'use strict';
 const fetch = require('node-fetch');
 const path = require('path');
+const pngToJpeg = require('png-to-jpeg');
+const fs = require('fs');
+const chromeLauncher = require('chrome-launcher');
+const CDP = require('chrome-remote-interface');
 
 let keyword = null;
 if (process.argv[2]) {
@@ -41,13 +45,9 @@ if (process.argv[4]) {
 }
 
 const save_img_dir = __dirname + `/data/scraping/${sns}/${keyword}`;
-const fs = require('fs');
 if (!fs.existsSync(save_img_dir)) {
     fs.mkdirSync(save_img_dir);
 }
-
-const chromeLauncher = require('chrome-launcher');
-const CDP = require('chrome-remote-interface');
 
 /**
  * Headless Chromeを起動する
@@ -162,7 +162,8 @@ async function main() {
                 if (contentType === 'image/jpeg') {
                     ext2 = '.jpg';
                 } else if (contentType === 'image/png') {
-                    ext2 = '.png';
+                    ext2 = '.jpg';
+                    buffer = await pngToJpeg({quality: 90})(buffer);
                 }
                 const filename = ext1 ? path.basename(url) : path.basename(url) + ext2;
                 await fs.writeFileSync(`${save_img_dir}/${filename}`, buffer);
