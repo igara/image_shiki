@@ -19,7 +19,7 @@ node chrome_launcher.js [keyword] [instagram or twitter or google] [更読み回
 train/[keyword]となるように画像を置く
 
 ```
-pip install keras tensorflow Pillow
+pip install keras tensorflow Pillow h5py
 ```
 
 学習
