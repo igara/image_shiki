@@ -1,11 +1,13 @@
 'use strict';
+const fetch = require('node-fetch');
+const path = require('path');
 
 let keyword = null;
 if (process.argv[2]) {
     keyword = process.argv[2];
 } else {
     console.log("コマンドライン引数にキーワードの指定がされていません");
-    console.log("例)node index.js [keyword] [instagram or twitter]");
+    console.log("例)node chrome_launcher.js [keyword] [instagram or twitter or google]");
     process.exit(1);
 }
 
@@ -16,10 +18,14 @@ if (process.argv[3] && process.argv[3] === "instagram") {
     sns = "instagram";
     targetUrl = `https://www.instagram.com/explore/tags/${keyword}`;
     sns_img_url_format = /^https:\/\/scontent-nrt1-1.cdninstagram.com\/\S*_n.jpg$/;
-} else if (process.argv[3] && process.argv[3]==="twitter") {
+} else if (process.argv[3] && process.argv[3] === "twitter") {
     sns = "twitter";
     targetUrl = `https://twitter.com/search?q=${keyword}`;
     sns_img_url_format = /^https:\/\/pbs.twimg.com\/media\/\S*.jpg$/;
+} else if (process.argv[3] && process.argv[3] === "google") {
+    sns = "google";
+    targetUrl = `https://www.google.co.jp/search?q=${keyword}&source=lnms&tbm=isch`;
+    sns_img_url_format = /^(data:image\/(jpeg|png);base64,|https:\/\/encrypted\-tbn0\.gstatic\.com\/images\?q=)\S*$/;
 } else {
     console.log("第二引数にスクレイピング可能なSNSの指定をしていません");
     console.log("Instagram or Twitter");
@@ -117,22 +123,50 @@ async function main() {
                         console.log(`${count}回スクロールをしました。`);
                     }
                 }
+            } else if (sns === "google") {
+                while(count < scroll) {
+                    count++;
+
+                    await Input.synthesizeScrollGesture({
+                        x: 400,
+                        y: 400,
+                        xDistance: 0,
+                        yDistance: -2000,
+                    });
+                    console.log(`${count}回スクロールをしました。`);
+                }
             }
 
             const res = await Page.getResourceTree();
-            const exec = require('child_process').execSync;
 
             let imgs = [];
             res.frameTree.resources.forEach((element, index) => {
                 if (element.url.match(sns_img_url_format)) {
                     imgs.push(element.url);
-                    console.log(element.url);
+                    // console.log(element.url);
                 }
             });
-            imgs.forEach((url, index) => {
-                exec(`(cd ${save_img_dir} && curl -Os ${url})`);
-                const result = exec(`echo $?`).toString();
-                if (index === imgs.length) {
+            imgs.forEach(async(url, index) => {
+                let contentType = null;
+                let buffer = null;
+                if (url.match(/(image\/(jpeg|png))/)) {
+                    contentType = url.match(/(image\/(jpeg|png))/)[0];
+                    buffer = new Buffer(url.replace(/(data:image\/(jpeg|png);base64,)/g , ''), 'base64');
+                } else {
+                    const response = await fetch(url);
+                    contentType = response.headers.get('content-type');                
+                    buffer = await response.buffer();
+                }
+                const ext1 = path.extname(url);
+                let ext2 = null;
+                if (contentType === 'image/jpeg') {
+                    ext2 = '.jpg';
+                } else if (contentType === 'image/png') {
+                    ext2 = '.png';
+                }
+                const filename = ext1 ? path.basename(url) : path.basename(url) + ext2;
+                await fs.writeFileSync(`${save_img_dir}/${filename}`, buffer);
+                if (index === imgs.length - 1) {
                     console.log("ダウンロード完了しました。");
                 }
             });
