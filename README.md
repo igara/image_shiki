@@ -22,7 +22,14 @@ train/[keyword]となるように画像を置く
 pip install keras tensorflow
 ```
 
+学習
 
 ```
-python index.py [画像認識したい画像のパス]
+python save_model.py [画像認識したい画像のパス]
+```
+
+作成済みのモデルを使用
+
+```
+python use_model.py [画像認識したい画像のパス] [作成した学習済みモデル]
 ```

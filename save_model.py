@@ -1,7 +1,6 @@
 from keras.models import Sequential
 from keras.layers import Activation, Dense, Dropout, Convolution2D, MaxPooling2D, Flatten
 from keras.utils.np_utils import to_categorical
-from keras.optimizers import Adagrad
 from keras.optimizers import Adam
 import numpy as np
 from PIL import Image
@@ -9,6 +8,7 @@ import os
 import shutil
 import sys
 import re
+import datetime
 
 # 学習用のデータを作る.
 image_list = []
@@ -26,17 +26,19 @@ if len(traindir) < 2:
 argvs = sys.argv
 if (len(argvs) != 2):
     print("コマンドラインの指定を下記のようにしてください")
-    print("python index.py [画像認識したい画像のパス]")
+    print("python save_model.py [画像認識したい画像のパス]")
+    sys.exit()
 
 image_path = argvs[1]
 if not os.path.exists(image_path):
     print("指定した画像が存在しません")
+    sys.exit()
 
 if os.path.exists("data/test/"):
     shutil.rmtree("data/test/")
     os.mkdir("data/test/")
 
-# ./data/train 以下のorange,appleディレクトリ以下の画像を読み込む。
+# ./data/trainディレクトリ以下の画像を読み込む。
 for dir in traindir:
     if dir == ".DS_Store":
         continue
@@ -118,7 +120,10 @@ opt = Adam(lr=0.001)
 model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
 # 学習を実行。10%はテストに使用。
 model.fit(image_list, Y, epochs=10, batch_size=100, validation_split=0.1)
-model.save("train.h5")
+
+d = datetime.datetime.now()
+# モデルを保存する
+model.save(d.strftime("%Y%m%d%H%M%S") + ".h5")
 
 print("\n\n\n\n\n\n\n\n")
 print("--------------- train finish ---------------")
