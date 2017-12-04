@@ -87,7 +87,6 @@ if train_label > 2:
         num = num + 1
         q, mod = divmod(num, 2)
         if mod != 0:
-            print("奇数")
             # プーリング層
             model.add(MaxPooling2D())
             # Dropoutとは過学習を防ぐためのもの　0.5は次のニューロンへのパスをランダムに半分にするという意味
@@ -95,7 +94,6 @@ if train_label > 2:
             model.add(Convolution2D(2 * (q + 1) * 100, 3, 3, border_mode="same"))
             model.add(Activation("relu"))
         else:
-            print("偶数")
             model.add(Convolution2D(2 * q * 100, 3, 3, border_mode="same"))
             model.add(Activation("relu"))
 

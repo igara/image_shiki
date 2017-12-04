@@ -19,7 +19,7 @@ node chrome_launcher.js [keyword] [instagram or twitter or google] [更読み回
 train/[keyword]となるように画像を置く
 
 ```
-pip install keras tensorflow
+pip install keras tensorflow Pillow
 ```
 
 学習
@@ -32,4 +32,15 @@ python save_model.py [画像認識したい画像のパス]
 
 ```
 python use_model.py [画像認識したい画像のパス] [作成した学習済みモデル]
+```
+
+vi ~/.keras/keras.json
+
+```
+{
+    "floatx": "float32",
+    "epsilon": 1e-07,
+    "backend": "tensorflow",
+    "image_data_format": "channels_first"
+}
 ```
