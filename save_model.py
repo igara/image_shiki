@@ -2,6 +2,7 @@ from keras.models import Sequential
 from keras.layers import Activation, Dense, Dropout, Conv2D, MaxPooling2D, Flatten
 from keras.utils.np_utils import to_categorical
 from keras.optimizers import Adam
+from keras.utils import plot_model
 import numpy as np
 from PIL import Image
 import os
@@ -105,6 +106,7 @@ model.fit(image_list, Y, epochs=10, batch_size=100, validation_split=0.1)
 d = datetime.datetime.now()
 # モデルを保存する
 model.save(d.strftime("%Y%m%d%H%M%S") + ".h5")
+plot_model(model, to_file='model.png')
 
 print("\n\n\n\n\n\n\n\n")
 print("--------------- train finish ---------------")

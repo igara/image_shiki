@@ -9,3 +9,5 @@ data/scraping/twitter/*
 !data/scraping/google/.keep
 !data/scraping/instagram/.keep
 !data/scraping/twitter/.keep
+*.h5
+model.png
