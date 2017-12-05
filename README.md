@@ -31,6 +31,7 @@ pip install keras tensorflow Pillow h5py
 学習
 
 ```
+tensorboard --logdir=tflog/
 python save_model.py [画像認識したい画像のパス]
 ```
 

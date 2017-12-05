@@ -72,7 +72,7 @@ for dir in os.listdir("data/train"):
         if file != ".DS_Store" and file != ".keep":
             label_list.append(test_label)
             filepath = dir1 + "/" + file
-            image = np.array(Image.open(filepath).resize((100, 100)))
+            image = np.array(Image.open(filepath).resize((128, 128)))
             image = image.transpose(2, 0, 1)
             result = model.predict_classes(np.array([image / 255.]))
 

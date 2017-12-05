@@ -11,3 +11,8 @@ data/scraping/twitter/*
 !data/scraping/twitter/.keep
 *.h5
 model.png
+tflog/events.out.tfevents.*
+tflog/checkpoint
+tflog/keras_embedding.*
+tflog/projector_config.*
+
