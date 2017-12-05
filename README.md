@@ -12,6 +12,12 @@ chrome-launcherとchrome-remote-interfaceを使用したもの
 node chrome_launcher.js [keyword] [instagram or twitter or google] [更読み回数]
 ```
 
+puppeteerを使用したもの
+
+```
+node puppeteer.js [keyword] [instagram or twitter or google] [更読み回数]
+```
+
 
 ## 画像認識
 
