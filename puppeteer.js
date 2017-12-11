@@ -123,9 +123,9 @@ if (!fs.existsSync(save_img_dir)) {
     imgs.forEach(async(url, index) => {
       let contentType = null;
       let buffer = null;
-      if (url.match(/(image\/(jpeg|png))/)) {
+      if (url.match(/^(data:image\/(jpeg|png))/)) {
         contentType = url.match(/(image\/(jpeg|png))/)[0];
-        buffer = new Buffer(url.replace(/(data:image\/(jpeg|png);base64,)/g , ''), 'base64');
+        buffer = new Buffer(url.replace(/^(data:image\/(jpeg|png);base64,)/g , ''), 'base64');
       } else {
         const response = await fetch(url);
         contentType = response.headers.get('content-type');                
